@@ -101,11 +101,13 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gtk_widget_set_visible(presetLabel, count > 0);
     if (count)
     {
+        int presetIndex = count/((int)2);
         gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
+
+        ghb_set_video_preset(ud->settings, encoder, video_presets[presetIndex]);
+        GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
+        ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
     }
-    ghb_set_video_preset(ud->settings, encoder, "medium");
-    GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
-    ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
 
     // Advanced options are only for x264
     if (!(encoder & HB_VCODEC_X264_MASK))
